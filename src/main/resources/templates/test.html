@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <style>
+    .container {
+    display: grid;
+    margin: 10px;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 5px;
+    }
+
+    body {
+    margin: 0;
+    font-family: helvetica, arial, sans-serif;
+    color: white;
+    }
+
+    .room {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: 60px repeat(4, minmax(100px, 1fr )) 60px;
+    grid-gap: 5px;
+
+    align-items: center;
+    justify-content: center;
+    border: 1px solid lightgrey;
+    padding: 10px;
+    }
+
+    .roomNo {
+    display: flex;
+    flex-flow: column;
+    padding: 10px;
+    height: 60%;
+    background-color: darkblue;
+    border-radius: 5px;
+    }
+
+    .roomNo.full{
+    background-color: darkred
+    }
+
+    .btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    cursor:pointer;
+    height: 60%;
+    background-color: black;
+
+    text-decoration: none;
+    color: white;
+    border-radius: 5px;
+    }
+
+    .roomNo, .saveRoom {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    }
+
+
+    .saveRoom{
+    grid-area: 6 / 1 / span 1 / span 4;
+    background-color: black;
+    }
+
+    .bed {
+    justify-self: center;
+    }
+
+
+
+    </style>
+
+</head>
+<body>
+
+<div class="container">
+    <div class="room" data-room="1">
+        <div class="roomNo">
+            <span>Room 1</span>
+            <span class="bedcount">Beds: 0</span>
+        </div>
+        <div class="btn roomDel" data-room="1">Delete Room</div>
+        <div class="btn addBed" data-room="1">Add Bed</div>
+        <div class="btn delBed" data-room="1">Delete Bed</div>
+        <div class="btn saveRoom" data-room="1">Save Room</div>
+    </div>
+    <div class="room" data-room="2">
+        <div class="roomNo">
+            <span>Room 2</span>
+            <span class="bedcount">Beds: 0</span>
+        </div>
+        <div class="btn roomDel" data-room="2">Delete Room</div>
+        <div class="btn addBed" data-room="2">Add Bed</div>
+        <div class="btn delBed" data-room="2">Delete Bed</div>
+        <div class="btn saveRoom" data-room="2">Save Room</div>
+    </div>
+</div>
+<script>
+
+        const rooms = document.querySelectorAll(".room");
+const addBedBtns = document.querySelectorAll(".addBed");
+
+for (let i = 0; i < addBedBtns.length; i++) {
+  addBedBtns[i].addEventListener("click", e => {
+    let room = document.querySelector(
+      `.room[data-room='${e.target.dataset.room}']`
+    );
+    let roombeds = room.querySelectorAll(".bed").length;
+
+    if (roombeds < 16) {
+      let bed = document.createElement("img");
+      bed.src = "https://via.placeholder.com/100";
+      bed.classList.add("bed");
+      room.appendChild(bed);
+      room.querySelector(".bedcount").innerText = `Beds: ${++roombeds}`;
+      if (++roombeds === 16) {
+        room.querySelector(".roomNo").classList.add("full");
+      }
+    } else {
+      alert("All beds in this room are filled!");
+    }
+  });
+}
+
+
+</script>
+</body>
+</html>

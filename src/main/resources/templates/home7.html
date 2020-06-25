@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Home</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://fonts.googleapis.com/css?family=Oswald:400,700|Muli:300,400,700,900" rel="stylesheet">
+
+    <link rel="stylesheet" th:href="@{/fonts/icomoon/style.css}">
+    <link rel="stylesheet" th:href="@{/css/test.css}">
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/jquery-ui.css}">
+    <link rel="stylesheet" th:href="@{/css/owl.carousel.min.css}">
+    <link rel="stylesheet" th:href="@{/css/owl.theme.default.min.css}">
+    <link rel="stylesheet" th:href="@{/css/owl.theme.default.min.css}">
+    <link rel="stylesheet" th:href="@{/css/jquery.fancybox.min.css}">
+    <link rel="stylesheet" th:href="@{/css/bootstrap-datepicker.css}">
+    <link rel="stylesheet" th:href="@{/fonts/flaticon/font/flaticon.css}">
+    <link rel="stylesheet" th:href="@{/css/aos.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link th:href="@{/resources/static/css/floor.css}">
+    <!-- #007bff -->
+    <style>
+
+
+*{
+  margin:0;
+  padding:0;
+}
+
+.floor-space{
+  background-color:black;
+  padding:0.5rem;
+  margin:0.5rem;
+ overflow: auto;
+
+}
+
+ol{
+  list-style:none;
+}
+
+.room-space{
+  display:flex;
+  flex-wrap:nowrap;
+  background-color:orange;
+  padding:0.5rem;
+  overflow: auto;
+
+}
+
+.room{
+  width:26.4rem;
+  height:15.8rem;
+  background-color:lightblue;
+  margin:0.3rem;
+  overflow: auto;
+}
+
+
+.grid-container {
+  display: grid;
+
+  grid-gap:0.5px;
+  grid-template-columns:105px 105px 105px 105px;
+  grid-template-rows:0.5fr 0.5fr 0.5fr 0.5fr 0.5fr 0.5fr;
+  grid-template-areas:
+    'roomPh deleteRoomPh addBedPh deleteBedPh'
+    'bedPh bedPh1 bedPh2 bedPh3'
+    'bedPh4 bedPh5 bedPh6 bedPh7'
+    'bedPh8 bedPh9 bedPh10 bedPh11'
+    'bedPh12 bedPh13 bedPh14 bedPh15'
+    'savePh savePh savePh savePh';
+  }
+
+    .roomPlaceholder{grid-area:roomPh;border: 1px solid red;text-align: center;}
+    .deleteRoomButtonPlaceholder{grid-area:deleteRoomPh;border: 1px solid red;text-align: center;}
+    .addBedButtonPlaceholder{grid-area:addBedPh;border: 1px solid red;text-align: center;}
+    .deleteBedButtonPlaceholder{grid-area:deleteBedPh;border: 1px solid red;text-align: center;}
+    .bedPlaceHolder{grid-area:bedPh;border: 1px solid red;}
+    .bedPlaceHolder1{grid-area:bedPh1;border: 1px solid red;}
+    .bedPlaceHolder2{grid-area:bedPh2;border: 1px solid red;}
+    .bedPlaceHolder3{grid-area:bedPh3;border: 1px solid red;}
+    .bedPlaceHolder4{grid-area:bedPh4;border: 1px solid red;}
+    .bedPlaceHolder5{grid-area:bedPh5;border: 1px solid red;}
+    .bedPlaceHolder6{grid-area:bedPh6;border: 1px solid red;}
+    .bedPlaceHolder7{grid-area:bedPh7;border: 1px solid red;}
+    .bedPlaceHolder8{grid-area:bedPh8;border: 1px solid red;}
+    .bedPlaceHolder9{grid-area:bedPh9;border: 1px solid red;}
+    .bedPlaceHolder10{grid-area:bedPh10;border: 1px solid red;}
+    .bedPlaceHolder11{grid-area:bedPh11;border: 1px solid red;}
+    .bedPlaceHolder12{grid-area:bedPh12;border: 1px solid red;}
+    .bedPlaceHolder13{grid-area:bedPh13;border: 1px solid red;}
+    .bedPlaceHolder14{grid-area:bedPh14;border: 1px solid red;}
+    .bedPlaceHolder15{grid-area:bedPh15;border: 1px solid red;}
+    .saveButtonPlaceholder{grid-area:savePh;border: 1px solid red;text-align: center;}
+
+    #deleteRoomSubmit{height:25px;width:100px;font-size:15px}
+    #deleteBedSubmit{height:25px;width:100px;font-size:15px}
+    #addBedSubmit{height:25px;width:100px;font-size:15px}
+    #saveBedsSubmit{height:25px;width:100px;font-size:15px}
+
+
+    </style>
+    <script>
+
+
+    </script>
+</head>
+<body data-spy="scroll" data-target=".site-navbar-target" data-offset="300">
+
+
+<div id="overlayer"></div>
+<div class="loader">
+    <div class="spinner-border text-primary" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
+
+<section>
+    <h1>Add floor</h1>
+    <form th:action="@{/addFloor}" method="post">
+        <input type="Submit" value="Add Floor">
+    </form>
+
+    <br>
+    <!--LISTS THE FLOORS -->
+    <div th:if="${not #lists.isEmpty(allFloors)}">
+        <!--Displaying floors -->
+        <div class="floor-space" th:each="floor : ${allFloors}">
+            <h3 th:text="'Floor ' + ${floor.level}"></h3>
+            <form th:action="@{/deleteFloor}" method="post">
+                <input type="hidden" th:value="${floor.id}" name="deleteFloorId">
+                <input type="Submit" value="Delete Floor">
+            </form>
+            <br>
+            <form th:action="@{/addRoom}" method="post">
+                <input type="hidden" th:value="${floor.id}" name="floorId">
+                <input type="Submit" value="Add Room">
+            </form>
+            <!-- Displaying rooms -->
+            <div th:if="${not #lists.isEmpty(floor.rooms)}">
+                <div class="room-space">
+                    <ol th:each="room : ${floor.rooms}">
+                        <li class="room">
+                            <div class="grid-container">
+                                <div class="roomPlaceholder" th:text="${room.name}"><p></p></div>
+                                <div class="deleteRoomButtonPlaceholder">
+                                    <form th:action="@{/deleteRoom}" method="post">
+                                        <input type="hidden" th:value="${room.id}" name="deleteRoomId">
+                                        <input id="deleteRoomSubmit" type="Submit" value="Delete Room">
+                                    </form>
+                                </div>
+                                <div class="addBedButtonPlaceholder">
+                                    <form th:action="@{/addBed}" method="post">
+                                        <input type="hidden" th:value="${room.id}" name="addBedId">
+                                        <input id="addBedSubmit" type="Submit" value="Add Bed">
+                                    </form>
+                                </div>
+                                <div class="deleteBedButtonPlaceholder">
+                                    <form th:action="@{/deleteBed}" method="post">
+                                        <input type="hidden" th:value="${room.id}" name="deleteBedId">
+                                        <input id="deleteBedSubmit" type="Submit" value="Delete Bed">
+                                    </form>
+                                </div>
+                                <div class="bedPlaceHolder"><p>Bed0</p></div>
+                                <div class="bedPlaceHolder1"><p>Bed1</p></div>
+                                <div class="bedPlaceHolder2"><p>Bed2</p></div>
+                                <div class="bedPlaceHolder3"><p>Bed3</p></div>
+                                <div class="bedPlaceHolder4"><p>Bed4</p></div>
+                                <div class="bedPlaceHolder5"><p>Bed5</p></div>
+                                <div class="bedPlaceHolder6"><p>Bed6</p></div>
+                                <div class="bedPlaceHolder7"><p>Bed7</p></div>
+                                <div class="bedPlaceHolder8"><p>Bed8</p></div>
+                                <div class="bedPlaceHolder9"><p>Bed9</p></div>
+                                <div class="bedPlaceHolder10"><p>Bed10</p></div>
+                                <div class="bedPlaceHolder11"><p>Bed11</p></div>
+                                <div class="bedPlaceHolder12"><p>Bed12</p></div>
+                                <div class="bedPlaceHolder13"><p>Bed13</p></div>
+                                <div class="bedPlaceHolder14"><p>Bed14</p></div>
+                                <div class="bedPlaceHolder15"><p>Bed15</p></div>
+                                <div class="saveButtonPlaceholder">
+                                    <form th:action="@{/saveBedFormation}" method="post">
+                                        <input type="hidden" th:value="${room.id}" name="saveBedFormation">
+                                        <input id="saveBedsSubmit" type="Submit" value="Save Beds">
+                                    </form>
+                                </div>
+                            </div>
+                        </li>
+
+                    </ol>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!--
+                                <div class="Room-1" th:text="${room.name}"></div>
+                                <div class="Delete-Room">
+                                    <form th:action="@{/deleteRoom}" method="post">
+                                        <input type="hidden" th:value="${room.id}" name="roomId">
+                                        <input type="Submit" value="Delete Room">
+                                    </form>
+                                </div>
+                                <div class="Add-Bed">
+                                    <form th:action="@{/addBed}" method="post">
+                                        <input type="hidden" th:value="${floor.id}" name="bedId">
+                                        <input type="Submit" value="Add Bed">
+                                    </form>
+                                </div>
+                                <div class="Delete-Bed">
+                                    <form th:action="@{/deleteBed}" method="post">
+                                        <input type="hidden" th:value="${floor.id}" name="bedId">
+                                        <input type="Submit" value="Delete Bed">
+                                    </form>
+                                </div>
+                                <div class="Save-Beds">
+                                    <form th:action="@{/addRoom}" method="post">
+                                        <input type="hidden" th:value="${floor.id}" name="bedsId">
+                                        <input type="Submit" value="Save Beds">
+                                    </form>
+                                </div>
+                                -->
+
+
+</section>
+</div>
+
+
+</div>
+
+
+</div> <!-- .site-wrap -->
+
+<script th:src="@{/js/jquery-3.3.1.min.js}"></script>
+<script th:src="@{/js/jquery-ui.js}"></script>
+<script th:src="@{/js/popper.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/owl.carousel.min.js}"></script>
+<script th:src="@{/js/jquery.easing.1.3.js}"></script>
+<script th:src="@{/js/aos.js}"></script>
+<script th:src="@{/js/jquery.fancybox.min.js}"></script>
+<script th:src="@{/js/jquery.waypoints.min.js}"></script>
+<script th:src="@{/js/jquery.animateNumber.min.js}"></script>
+<script th:src="@{/js/jquery.sticky.js}"></script>
+<script th:src="@{/js/main.js}"></script>
+<script th:src="@{/js/floor.js}"></script>
+
+
+</body>
+</html>

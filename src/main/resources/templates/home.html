@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title></title>
+</head>
+<body>
+<h1>Home</h1>
+<form th:action="@{/addFloor}" method="post">
+    <input type="Submit" value="Add Floor">
+</form>
+<div th:if="${not #lists.isEmpty(floors)}">
+    <div th:each="floor : ${floors}">
+        <div th:text="${floor.level}"></div>
+    </div>
+
+
+</div>
+
+</body>
+</html>

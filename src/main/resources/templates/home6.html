@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Home</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://fonts.googleapis.com/css?family=Oswald:400,700|Muli:300,400,700,900" rel="stylesheet">
+
+    <link rel="stylesheet" th:href="@{/fonts/icomoon/style.css}">
+    <link rel="stylesheet" th:href="@{/css/test.css}">
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/jquery-ui.css}">
+    <link rel="stylesheet" th:href="@{/css/owl.carousel.min.css}">
+    <link rel="stylesheet" th:href="@{/css/owl.theme.default.min.css}">
+    <link rel="stylesheet" th:href="@{/css/owl.theme.default.min.css}">
+    <link rel="stylesheet" th:href="@{/css/jquery.fancybox.min.css}">
+    <link rel="stylesheet" th:href="@{/css/bootstrap-datepicker.css}">
+    <link rel="stylesheet" th:href="@{/fonts/flaticon/font/flaticon.css}">
+    <link rel="stylesheet" th:href="@{/css/aos.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link th:href="@{/resources/static/css/floor.css}">
+    <!-- #007bff -->
+    <style>
+
+
+*{
+  margin:0;
+  padding:0;
+}
+
+.floor-space{
+  background-color:black;
+  padding:0.5rem;
+  margin:0.5rem;
+ overflow: auto;
+
+}
+
+ol{
+  list-style:none;
+}
+
+.room-space{
+  display:flex;
+  flex-wrap:nowrap;
+  background-color:orange;
+  padding:0.5rem;
+  overflow: auto;
+
+}
+
+.room{
+  width:18rem;
+  height:18rem;
+  background-color:lightblue;
+  margin:0.3rem;
+
+}
+
+
+
+
+    </style>
+    <script>
+
+
+    </script>
+</head>
+<body data-spy="scroll" data-target=".site-navbar-target" data-offset="300">
+
+
+<div id="overlayer"></div>
+<div class="loader">
+    <div class="spinner-border text-primary" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
+
+
+<section>
+
+
+    <h1>Add floor</h1>
+    <form th:action="@{/addFloor}" method="post">
+        <input type="Submit" value="Add Floor">
+    </form>
+
+    <br>
+    <!--LISTS THE FLOORS -->
+    <div th:if="${not #lists.isEmpty(allFloors)}">
+        <!--Displaying floors -->
+        <div class="floor-space" th:each="floor : ${allFloors}">
+            <h3 th:text="'Floor ' + ${floor.level}"></h3>
+            <br>
+            <form th:action="@{/addRoom}" method="post">
+                <input type="hidden" th:value="${floor.id}" name="floorId">
+                <input type="Submit" value="Add Room">
+            </form>
+            <!-- Displaying rooms -->
+            <div th:if="${not #lists.isEmpty(floor.rooms)}">
+                <div class="room-space">
+                <ol  th:each="room : ${floor.rooms}">
+
+                    <li class="room" th:text="${room.name}"></li>
+                </ol>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- </div> -->
+
+    <!--
+     <div class="main-floors" th:each="floor : ${allFloors}">
+                <ul>
+                    <li th:text="'Floor ' + ${floor.level}"></li>
+                    <li>
+                        <form th:action="@{/addRoom}" method="post">
+                            <input type="hidden" th:value="${floor.id}" name="floorId">
+                            <input type="Submit" value="Add Room">
+                        </form>
+                    </li>
+                </ul>
+
+            <div th:if="${not #lists.isEmpty(floor.rooms)}">
+                <div class="rooms" th:each="room : ${floor.rooms}">
+                    <ul>
+                        <li th:text="${room.name}"></li>
+                    </ul>
+                </div>
+            </div>
+
+.main-floors {
+display:flex;
+flex-direction:column;
+border: 5px solid black;
+}
+
+.rooms {
+display:flex;
+flex-wrap:nowrap;
+position:relative;
+border: 5px solid red;
+}
+
+ul {
+list-style:none;
+}
+
+
+    -->
+
+</section>
+</div>
+
+
+</div>
+
+
+</div> <!-- .site-wrap -->
+
+<script th:src="@{/js/jquery-3.3.1.min.js}"></script>
+<script th:src="@{/js/jquery-ui.js}"></script>
+<script th:src="@{/js/popper.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/owl.carousel.min.js}"></script>
+<script th:src="@{/js/jquery.easing.1.3.js}"></script>
+<script th:src="@{/js/aos.js}"></script>
+<script th:src="@{/js/jquery.fancybox.min.js}"></script>
+<script th:src="@{/js/jquery.waypoints.min.js}"></script>
+<script th:src="@{/js/jquery.animateNumber.min.js}"></script>
+<script th:src="@{/js/jquery.sticky.js}"></script>
+<script th:src="@{/js/main.js}"></script>
+<script th:src="@{/js/floor.js}"></script>
+
+
+</body>
+</html>
