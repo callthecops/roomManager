@@ -19,7 +19,13 @@ public class FloorService {
         if (floorList.isEmpty()) {
             level = 0;
         } else {
-            level = floorList.size();
+            level = 0;
+            for(Floor floor: floorList){
+                if(floor.getLevel() > level){
+                    level = floor.getLevel();
+                }
+            }
+            level = level+1;
         }
         Floor floor = new Floor(level);
         floorRepository.save(floor);

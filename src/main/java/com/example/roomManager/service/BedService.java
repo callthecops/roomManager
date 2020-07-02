@@ -1,10 +1,8 @@
 package com.example.roomManager.service;
 
 import com.example.roomManager.model.Bed;
-import com.example.roomManager.model.Floor;
 import com.example.roomManager.model.Room;
 import com.example.roomManager.repository.BedRepository;
-import com.example.roomManager.repository.FloorRepository;
 import com.example.roomManager.repository.RoomRepository;
 import com.example.roomManager.utils.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;

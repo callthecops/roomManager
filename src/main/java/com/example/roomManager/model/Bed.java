@@ -23,6 +23,10 @@ public class Bed {
     public Bed() {
     }
 
+    public Bed(int number) {
+        this.number = number;
+    }
+
     public Long getId() {
         return id;
     }

@@ -1,12 +1,10 @@
 package com.example.roomManager.security;
 
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -47,7 +45,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .authorizeRequests().antMatchers(HttpMethod.GET, "/resources/**", "/js/**", "/css/**", "/images/**", "/fonts/**", "/scss/**", "/index", "/", "/login").permitAll()
+                .authorizeRequests()
+                .antMatchers(HttpMethod.GET, "/resources/**", "/js/**", "/css/**", "/images/**", "/fonts/**", "/scss/**", "/index", "/", "/login").permitAll()
                 //this is enableing request on static resources wich are blocked by spring security automatically.
                 .antMatchers(PUBLIC_MATCHERS).permitAll()
                 .anyRequest().authenticated()
@@ -61,8 +60,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .logout()
                 .logoutSuccessUrl("/")
-                .logoutUrl("/signout");
-
+                .logoutUrl("/signout")
+                .and()
+                .csrf().disable();
     }
 
 //    @Override

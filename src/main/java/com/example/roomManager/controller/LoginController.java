@@ -15,21 +15,22 @@ import java.util.List;
 public class LoginController {
     @Autowired
     FloorRepository floorRepository;
-    @Autowired
-    RoomRepository roomRepository;
+
 
     @GetMapping("/login")
     public String showLogin() {
-
+        System.out.println("In login");
         return "login4";
     }
 
     @GetMapping("/home")
     public String showHome(Model model) {
-        List<Floor> allFloors = (List<Floor>) floorRepository.findAll();
+        System.out.println("In showHome");
 
+        List<Floor> allFloors = (List<Floor>) floorRepository.findAll();
         model.addAttribute("allFloors", allFloors);
-        return "home7";
+
+        return "home9";
     }
 
 

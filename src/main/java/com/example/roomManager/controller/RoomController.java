@@ -3,12 +3,13 @@ package com.example.roomManager.controller;
 import com.example.roomManager.model.Room;
 import com.example.roomManager.repository.RoomRepository;
 import com.example.roomManager.service.RoomService;
-import com.example.roomManager.utils.ResourceNotFoundException;
+import com.example.roomManager.utils.Criteria;
+import com.example.roomManager.utils.ResponseMsg;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 public class RoomController {
@@ -20,16 +21,29 @@ public class RoomController {
     RoomRepository roomRepository;
 
     @PostMapping("/addRoom")
-    public String addRoom(@RequestParam String floorId) {
+    public ResponseEntity<?> addRoom(@RequestBody Criteria criteria) {
+        System.out.println("In addRoom Function of RoomController");
+        Room room = roomService.saveRoom(criteria.getCriteriaId());
+        ResponseMsg result = new ResponseMsg();
+        result.setResponse(room.getName());
+        result.setId(room.getId()+"");
+        return ResponseEntity.ok(result);
+
+        //return "redirect:/home";
+    }
+    /*public String addRoom(@RequestParam String floorId) {
         roomService.saveRoom(floorId);
         return "redirect:/home";
-    }
+    }*/
 
     @PostMapping("/deleteRoom")
-    public String deleteRoom(@RequestParam String deleteRoomId) {
-        Room room = roomRepository.findById(Long.parseLong(deleteRoomId)).orElseThrow(ResourceNotFoundException::new);
-        roomRepository.delete(room);
+    public ResponseEntity<?> deleteRoom(@RequestBody Criteria criteria) {
+        System.out.println("In deleteRoom Function in RoomController");
+        roomService.deleteRoom(criteria.getCriteriaId());
+        ResponseMsg result = new ResponseMsg();
+        result.setResponse("Success");
+        return ResponseEntity.ok(result);
 
-        return "redirect:/home";
+        //return "redirect:/home";
     }
 }

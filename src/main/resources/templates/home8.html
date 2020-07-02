@@ -51,10 +51,7 @@ ol{
 
 }
 
-
-
-
-    .container {
+ .container {
     display: grid;
     margin: 10px;
     grid-template-columns: repeat(2, 1fr);
@@ -124,6 +121,10 @@ ol{
 
 
     </style>
+    <script>
+
+
+    </script>
 </head>
 <body data-spy="scroll" data-target=".site-navbar-target" data-offset="300">
 
@@ -160,78 +161,24 @@ ol{
             <div th:if="${not #lists.isEmpty(floor.rooms)}">
                 <div class="room-space">
                     <ol th:each="room : ${floor.rooms}">
-                        <li class="room">
-                            <!-- Displaying rooms -->
-                            <div class="container">
-                                <div class="room" data-room="1">
-                                    <div class="roomNo">
-                                        <span th:text=${room.name}></span>
-                                        <span class="bedcount">Beds: 0</span>
-                                    </div>
-                                    <form th:action="@{/deleteRoom}" method="post">
-                                        <input type="hidden" th:value="${room.id}" name="deleteRoomId">
-                                        <input class="btn roomDel" data-room="1" type="Submit" value="Delete Room">
-                                    </form>
-                                    <div class="btn addBed" data-room="1">Add Bed</div>
-                                    <div class="btn delBed" data-room="1">Delete Bed</div>
-                                    <div class="btn saveRoom" data-room="1">Save Room</div>
+                        <div class="container">
+                            <div class="room" data-room="1">
+                                <div class="roomNo">
+                                    <span th:text="${room.name}"></span>
+                                    <span class="bedcount">Beds: 0</span>
                                 </div>
+                                <div class="btn roomDel" data-room="1" onclick="deleteRoom(this)">Delete Room</div>
+                                <div class="btn addBed" th:attr="data-room=${room.id}" onclick="addBed(this)">Add Bed</div>
+                                <div class="btn delBed" data-room="1" onclick="deleteBed(this)">Delete Bed</div>
+                                <div class="btn saveRoom" data-room="1" onclick="saveRoom(this)">Save Room</div>
                             </div>
-
-
-                            <!--
-                            <div class="grid-container">
-                                <div class="roomPlaceholder" th:text="${room.name}"><p></p></div>
-                                <div class="deleteRoomButtonPlaceholder">
-                                    <form th:action="@{/deleteRoom}" method="post">
-                                        <input type="hidden" th:value="${room.id}" name="deleteRoomId">
-                                        <input id="deleteRoomSubmit" type="Submit" value="Delete Room">
-                                    </form>
-                                </div>
-                                <div class="addBedButtonPlaceholder">
-                                    <form th:action="@{/addBed}" method="post">
-                                        <input type="hidden" th:value="${room.id}" name="addBedId">
-                                        <input id="addBedSubmit" type="Submit" value="Add Bed">
-                                    </form>
-                                </div>
-                                <div class="deleteBedButtonPlaceholder">
-                                    <form th:action="@{/deleteBed}" method="post">
-                                        <input type="hidden" th:value="${room.id}" name="deleteBedId">
-                                        <input id="deleteBedSubmit" type="Submit" value="Delete Bed">
-                                    </form>
-                                </div>
-                                <div class="bedPlaceHolder"><p>Bed0</p></div>
-                                <div class="bedPlaceHolder1"><p>Bed1</p></div>
-                                <div class="bedPlaceHolder2"><p>Bed2</p></div>
-                                <div class="bedPlaceHolder3"><p>Bed3</p></div>
-                                <div class="bedPlaceHolder4"><p>Bed4</p></div>
-                                <div class="bedPlaceHolder5"><p>Bed5</p></div>
-                                <div class="bedPlaceHolder6"><p>Bed6</p></div>
-                                <div class="bedPlaceHolder7"><p>Bed7</p></div>
-                                <div class="bedPlaceHolder8"><p>Bed8</p></div>
-                                <div class="bedPlaceHolder9"><p>Bed9</p></div>
-                                <div class="bedPlaceHolder10"><p>Bed10</p></div>
-                                <div class="bedPlaceHolder11"><p>Bed11</p></div>
-                                <div class="bedPlaceHolder12"><p>Bed12</p></div>
-                                <div class="bedPlaceHolder13"><p>Bed13</p></div>
-                                <div class="bedPlaceHolder14"><p>Bed14</p></div>
-                                <div class="bedPlaceHolder15"><p>Bed15</p></div>
-                                <div class="saveButtonPlaceholder">
-                                    <form th:action="@{/saveBedFormation}" method="post">
-                                        <input type="hidden" th:value="${room.id}" name="saveBedFormation">
-                                        <input id="saveBedsSubmit" type="Submit" value="Save Beds">
-                                    </form>
-                                </div>
-                            </div> -->
-                        </li>
-
+                        </div>
                     </ol>
                 </div>
             </div>
 
         </div>
     </div>
-
 </section>
 </div>
 
@@ -240,36 +187,6 @@ ol{
 
 
 </div> <!-- .site-wrap -->
-
-<script>
-
-        const rooms = document.querySelectorAll(".room");
-const addBedBtns = document.querySelectorAll(".addBed");
-
-for (let i = 0; i < addBedBtns.length; i++) {
-  addBedBtns[i].addEventListener("click", e => {
-    let room = document.querySelector(
-      `.room[data-room='${e.target.dataset.room}']`
-    );
-    let roombeds = room.querySelectorAll(".bed").length;
-
-    if (roombeds < 16) {
-      let bed = document.createElement("img");
-      bed.src = "https://via.placeholder.com/100";
-      bed.classList.add("bed");
-      room.appendChild(bed);
-      room.querySelector(".bedcount").innerText = `Beds: ${++roombeds}`;
-      if (++roombeds === 16) {
-        room.querySelector(".roomNo").classList.add("full");
-      }
-    } else {
-      alert("All beds in this room are filled!");
-    }
-  });
-}
-    </script>
-
-
 
 <script th:src="@{/js/jquery-3.3.1.min.js}"></script>
 <script th:src="@{/js/jquery-ui.js}"></script>
@@ -285,6 +202,84 @@ for (let i = 0; i < addBedBtns.length; i++) {
 <script th:src="@{/js/main.js}"></script>
 <script th:src="@{/js/floor.js}"></script>
 
+<script>
 
+    const rooms = document.querySelectorAll(".room");
+const addBedBtns = document.querySelectorAll(".addBed");
+const removeBedBtns = document.querySelectorAll(".delBed");
+
+function deleteRoom(data) {
+  // Delete room = delete all beds
+  let roomId = data.getAttribute("data-room");
+
+  let room = document.querySelector(
+      `.room[data-room='${roomId}']`
+  );
+
+  let roomBeds = room.querySelectorAll(".bed");
+
+  for (let i = 0; i < roomBeds.length; i++) {
+    let child = roomBeds[i];
+    room.removeChild(child);
+  }
+  room.querySelector(".bedcount").innerText = `Beds: ${0}`;
+  room.querySelector(".roomNo").classList.remove("full");
+}
+
+function deleteBed(data) {
+  let roomId = data.getAttribute("data-room");
+
+  let room = document.querySelector(
+      `.room[data-room='${roomId}']`
+  );
+
+  let roombeds = room.querySelectorAll(".bed");
+
+  if (roombeds.length >= 1) {
+    let lastBed = roombeds[roombeds.length -1];
+    room.removeChild(lastBed);
+    if (--roombeds.length < 16) {
+        room.querySelector(".roomNo").classList.remove("full");
+    }
+    room.querySelector(".bedcount").innerText = `Beds: ${--roombeds.length}`;
+
+  } else {
+    alert("Cannot delete any beds because there is no bed to delete");
+  }
+}
+
+function addBed(data) {
+  let roomId = data.getAttribute("data-room");
+
+  let room = document.querySelector(
+      `.room[data-room='${roomId}']`
+  );
+
+  let roombeds = room.querySelectorAll(".bed").length;
+
+  if (roombeds < 16) {
+      let bed = document.createElement("img");
+      bed.src = "https://via.placeholder.com/100";
+      bed.classList.add("bed");
+      let dataAttr = document.createAttribute("data-room");
+      dataAttr.value=roomId;
+      bed.setAttributeNode(dataAttr);
+      room.appendChild(bed);
+      room.querySelector(".bedcount").innerText = `Beds: ${++roombeds}`;
+      if (roombeds === 16) {
+        room.querySelector(".roomNo").classList.add("full");
+      }
+    } else {
+      alert("All beds in this room are filled!");
+    }
+}
+
+function saveRoom(data) {
+  alert("Save Room Command");
+  alert(data.getAttribute("data-room"))
+}
+
+
+</script>
 </body>
 </html>
