@@ -36,7 +36,7 @@
   padding:0.5rem;
   margin:0.5rem;
  overflow: auto;
-
+  border-radius:5px;
 }
 
 ol{
@@ -140,7 +140,20 @@ ol{
 
 
     #uppersection{
-    text-align:center;}
+    text-align:center;
+
+    }
+
+    #first li {
+  display: inline-block;
+}
+    #first{
+    list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Or space-around */
+  }
+
     #pagetitle{
     color:black;}
 
@@ -163,14 +176,20 @@ ol{
 </div>
 
 <div id="uppersection">
-    <form th:action="@{/addFloor}" method="post">
-        <input type="Submit" id="subbutton" class="btn" value="Add Floor">
-    </form>
+    <ol id="first">
+        <li id="second">
+            <form th:action="@{/addFloor}" method="post">
+                <input type="Submit" id="subbutton" class="btn" value="Add Floor">
+            </form>
+        </li>
+        <li>
+            <a class="btn" th:href="@{/signout}">Sign out</a>
+        </li>
+    </ol>
     <h3 id="pagetitle">Room Manager</h3>
 </div>
 
 <section>
-
     <br>
     <!--LISTS THE FLOORS -->
     <div th:if="${not #lists.isEmpty(allFloors)}">
@@ -183,96 +202,34 @@ ol{
             </form>
             <br>
             <div class="btn addRoom" th:data-room="${floor.id}">Add Room</div>
-            <!--<input type="hidden" th:value="${floor.id}" id="floorId">-->
 
-            <!--<form th:action="@{/addRoom}" method="post">
-                <input type="hidden" th:value="${floor.id}" name="floorId">
-                <input type="Submit" value="Add Room">
-            </form>-->
-            <!-- Displaying rooms -->
-            <!--<div th:if="${not #lists.isEmpty(floor.rooms)}">-->
             <div class="room-space" th:data-room="${floor.id}">
-                <!--<ol th:each="room : ${floor.rooms}">
-                    <li class="room">-->
-                <!--<div class="container">-->
+
                 <ol th:each="room : ${floor.rooms}">
                     <li class="room" th:data-room="${room.id}">
                         <div class="roomNo" th:classappend="${(room.beds.size() == 16 ? 'full': 'empty')}">
                             <span th:text="${room.name}"></span>
-                            <!--<span class="bedcount" th:text="${room.Beds.size()}"></span>-->
+
                         </div>
                         <div class="btn roomDel" th:data-room="${room.id}">Delete Room</div>
-                        <!--<form th:action="@{/deleteRoom}" method="post">
-                            <input type="hidden" th:value="${room.id}" name="deleteRoomId">
-                            <input id="deleteRoom" type="Submit" class="btn roomDel" th:data-room="${room.name}" value="Delete Room">
-                        </form>-->
+
 
                         <div class="btn addBed" th:data-room="${room.id}">Add Bed</div>
-                        <!--<input type="hidden" th:value="${room.id}" id="roomId">-->
-                        <!--<form th:action="@{/addBed}" method="post">
-                             <input type="hidden" th:value="${room.id}" name="roomId">
-                             <input id="addBed" type="Submit" class="btn delBed" th:data-room="${room.name}" value="Add Bed">
-                         </form>-->
+
 
                         <div class="btn delBed" th:data-room="${room.id}">Delete Bed</div>
-                        <!--<form th:action="@{/delBed}" method="post">
-                            <input type="hidden" th:value="${room.id}" name="roomId">
-                            <input id="delBed" type="Submit" class="btn delBed" th:data-room="${room.name}" value="Delete Bed">
-                        </form>-->
 
-                        <!--<div class="btn saveRoom" th:data-room="${room.name}">Save Room</div>-->
                         <div th:each="bed : ${room.beds}">
-                            <!-- <form name="bedForm"th:action="@{/occupiedBed}" method="post">
-                                 <input type="hidden" th:value="${bed.id}" name="bedId">-->
-                            <!--<input type="hidden" th:value="${bed.id}" id="bedId">-->
+
                             <img class="bed" th:data-room="${bed.id}" width="100" height="100"
                                  th:src="${bed.occupied}?@{/images/red-hotel-bed-md.png}:@{/images/green-hotel-bed-md.png}">
                         </div>
                     </li>
 
                 </ol>
-                <!--</div>-->
 
-                <!-- <div class="addBedButtonPlaceholder">
-                     <form th:action="@{/addBed}" method="post">
-                         <input type="hidden" th:value="${room.id}" name="addBedId">
-                         <input id="addBedSubmit" type="Submit" value="Add Bed">
-                     </form>
-                 </div>
-                 <div class="deleteBedButtonPlaceholder">
-                     <form th:action="@{/deleteBed}" method="post">
-                         <input type="hidden" th:value="${room.id}" name="deleteBedId">
-                         <input id="deleteBedSubmit" type="Submit" value="Delete Bed">
-                     </form>
-                 </div>
-                 <div class="bedPlaceHolder"><p>Bed0</p></div>
-                 <div class="bedPlaceHolder1"><p>Bed1</p></div>
-                 <div class="bedPlaceHolder2"><p>Bed2</p></div>
-                 <div class="bedPlaceHolder3"><p>Bed3</p></div>
-                 <div class="bedPlaceHolder4"><p>Bed4</p></div>
-                 <div class="bedPlaceHolder5"><p>Bed5</p></div>
-                 <div class="bedPlaceHolder6"><p>Bed6</p></div>
-                 <div class="bedPlaceHolder7"><p>Bed7</p></div>
-                 <div class="bedPlaceHolder8"><p>Bed8</p></div>
-                 <div class="bedPlaceHolder9"><p>Bed9</p></div>
-                 <div class="bedPlaceHolder10"><p>Bed10</p></div>
-                 <div class="bedPlaceHolder11"><p>Bed11</p></div>
-                 <div class="bedPlaceHolder12"><p>Bed12</p></div>
-                 <div class="bedPlaceHolder13"><p>Bed13</p></div>
-                 <div class="bedPlaceHolder14"><p>Bed14</p></div>
-                 <div class="bedPlaceHolder15"><p>Bed15</p></div>
-                 <div class="saveButtonPlaceholder">
-                     <form th:action="@{/saveBedFormation}" method="post">
-                         <input type="hidden" th:value="${room.id}" name="saveBedFormation">
-                         <input id="saveBedsSubmit" type="Submit" value="Save Beds">
-                     </form>
-                 </div>
-             </div>
-         </li>
-
-     </ol>-->
             </div>
-            <!--</div>-->
+
         </div>
     </div>
 
@@ -527,6 +484,11 @@ function occupiedBedInRoom(e){
         }
       });
 }
+
+
+
+
+
 
 
 </script>

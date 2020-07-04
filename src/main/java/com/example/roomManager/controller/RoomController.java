@@ -22,7 +22,7 @@ public class RoomController {
 
     @PostMapping("/addRoom")
     public ResponseEntity<?> addRoom(@RequestBody Criteria criteria) {
-        System.out.println("In addRoom Function of RoomController");
+
         Room room = roomService.saveRoom(criteria.getCriteriaId());
         ResponseMsg result = new ResponseMsg();
         result.setResponse(room.getName());
@@ -31,14 +31,11 @@ public class RoomController {
 
         //return "redirect:/home";
     }
-    /*public String addRoom(@RequestParam String floorId) {
-        roomService.saveRoom(floorId);
-        return "redirect:/home";
-    }*/
+
 
     @PostMapping("/deleteRoom")
     public ResponseEntity<?> deleteRoom(@RequestBody Criteria criteria) {
-        System.out.println("In deleteRoom Function in RoomController");
+
         roomService.deleteRoom(criteria.getCriteriaId());
         ResponseMsg result = new ResponseMsg();
         result.setResponse("Success");

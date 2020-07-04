@@ -27,7 +27,7 @@ public class FloorController {
 
     @PostMapping("/addFloor")
     public String addFloor() {
-        System.out.println("In addFloor Controller Function");
+
         floorService.saveFloor();
         return "redirect:/home/#";
     }
@@ -45,13 +45,7 @@ public class FloorController {
                 roomRepository.delete(room);
             }
         }
-        /*List<Floor> floorList = (List<Floor>) floorRepository.findAll();
-        for(Floor flr: floorList){
-            if(flr.getLevel() > floor.getLevel()){
-                flr.setLevel(flr.getLevel()-1);
-                floorRepository.save(flr);
-            }
-        }*/
+
         floorRepository.delete(floor);
         return "redirect:/home";
     }

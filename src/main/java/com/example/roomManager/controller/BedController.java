@@ -23,12 +23,11 @@ public class BedController {
 
     @PostMapping("/addBed")
     public ResponseEntity<?> addBed(@RequestBody Criteria criteria) {
-        System.out.println("In addBed Function of BedController");
-        System.out.println(criteria.getCriteriaId());
+
         Long id = bedService.saveBed(criteria.getCriteriaId());
         ResponseMsg result = new ResponseMsg();
         result.setResponse("Success");
-        result.setId(id+"");
+        result.setId(id + "");
         return ResponseEntity.ok(result);
 
         //return "redirect:/home";
@@ -36,8 +35,7 @@ public class BedController {
 
     @PostMapping("/delBed")
     public ResponseEntity<?> deleteBed(@RequestBody Criteria criteria) {
-        System.out.println("In deleteBed Function of BedController");
-        System.out.println(criteria.getCriteriaId());
+
         bedService.deleteBed(criteria.getCriteriaId());
         ResponseMsg result = new ResponseMsg();
         result.setResponse("Success");
@@ -48,7 +46,7 @@ public class BedController {
 
     @PostMapping("/occupiedBed")
     public ResponseEntity<?> occupiedBed(@RequestBody Criteria criteria) {
-        System.out.println("In occupiedBed Function of BedController");
+
         Bed bed = bedRepository.findById(Long.parseLong(criteria.getCriteriaId())).orElseThrow(ResourceNotFoundException::new);
         bed.setOccupied(!bed.isOccupied());
         bedRepository.save(bed);

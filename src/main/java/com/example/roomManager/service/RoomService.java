@@ -49,7 +49,7 @@ public class RoomService {
     }
 
     public void deleteRoom(String id) {
-        System.out.println("In deleteRoom Function in RoomService");
+
         Room room = roomRepository.findById(Long.parseLong(id)).orElseThrow(ResourceNotFoundException::new);
         List<Bed> bedList = room.getBeds();
         int number = 0;
@@ -58,19 +58,6 @@ public class RoomService {
                 bedRepository.delete(bed);
             }
         }
-
-     /*   List<Room> roomList = roomRepository.findByFloorId(room.getFloor().getId());
-        boolean flag = false;
-        for(Room rm: roomList){
-            if(rm.getName().equals(room.getName())) {
-                flag = true;
-            }else if(flag){
-                String[] tokens = rm.getName().split(" ");
-                String name = tokens[0] + (Integer.parseInt(tokens[1])-1);
-                rm.setName(name);
-                roomRepository.save(rm);
-            }
-        }*/
 
         roomRepository.delete(room);
     }

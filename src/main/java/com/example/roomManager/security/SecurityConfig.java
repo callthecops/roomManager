@@ -1,8 +1,10 @@
 package com.example.roomManager.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -13,6 +15,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+
 
     //this is added so we can give it a parameter and make request on static resources available
     private static final String[] PUBLIC_MATCHERS = {
@@ -59,19 +63,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .defaultSuccessUrl("/home", true)
                 .and()
                 .logout()
-                .logoutSuccessUrl("/")
                 .logoutUrl("/signout")
+                .logoutSuccessUrl("/login4.html")
+                .invalidateHttpSession(true)
                 .and()
                 .csrf().disable();
     }
 
-//    @Override
-//    public void configure(WebSecurity web) throws Exception {
-//        web
-//                .ignoring()
-//                .antMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**", "/assets/**", "/fonts/**", "/dis/**", "/vendor1/**");
-//
-//    }
+
 
 
     //Basic password encoder using bcrypt for encryption.
