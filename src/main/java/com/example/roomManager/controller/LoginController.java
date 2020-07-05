@@ -31,18 +31,18 @@ public class LoginController {
 
     @GetMapping("/login")
     public String showLogin() {
-
+        System.out.println("IN LOGIN");
         return "login4";
     }
 
     @PostMapping("/loginver")
     public String loginProcessForm(@RequestParam String username, @RequestParam String password) {
-        System.out.println(username);
-        String pass = bCryptPasswordEncoder.encode(password);
-        User user = userRepository.findByName(username);
-        System.out.println(user.getName());
-        System.out.println(user.getPassword());
-        System.out.println(user.getRole());
+        System.out.println("qwdwqdwqd");
+        //String pass = bCryptPasswordEncoder.encode(password);
+        //User user = userRepository.findByName("user1");
+        //System.out.println(user.getName());
+        //System.out.println(user.getPassword());
+        //System.out.println(user.getRole());
 
         return "succes";
     }

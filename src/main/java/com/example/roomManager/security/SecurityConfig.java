@@ -17,7 +17,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
-
     //this is added so we can give it a parameter and make request on static resources available
     private static final String[] PUBLIC_MATCHERS = {
             "/webjars/**",
@@ -69,8 +68,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .csrf().disable();
     }
-
-
 
 
     //Basic password encoder using bcrypt for encryption.
