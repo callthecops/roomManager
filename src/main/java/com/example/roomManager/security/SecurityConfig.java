@@ -4,11 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -16,6 +16,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    @Autowired
+    private UserDetailsService userDetailsService;
 
     //this is added so we can give it a parameter and make request on static resources available
     private static final String[] PUBLIC_MATCHERS = {
@@ -30,13 +32,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     //This method is responsible with the authentication of things.
     //In this method we select the inMemoryAuth in order to add users to use in the log in form in memory .
     //Then we use the password eccoder to encrypt the password
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth
-                .inMemoryAuthentication()
-                .withUser("user").password(passwordEncoder().encode("password")).roles("USER").and()
-                .withUser("admin").password(passwordEncoder().encode("password")).roles("USER", "ADMIN");
-    }
+//    @Override
+//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+//        auth
+//                .inMemoryAuthentication()
+//                .withUser("user").password(passwordEncoder().encode("password")).roles("USER").and()
+//                .withUser("admin").password(passwordEncoder().encode("password")).roles("USER", "ADMIN");
+//    }
 
     //This method is responsible for configuring all the requests and mappings.What this does is the following.
     //we create a custom login page by adding .and().formLogin().loginPage("/login") and we use permitAll()
@@ -55,7 +57,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
-                .loginPage("/login")
+                .loginPage("/login").failureUrl("/login?error=true")
+                .usernameParameter("username")
+                .passwordParameter("password")
+
                 .permitAll()
                 //This method here automatically redirects the user after login to the /home endpoint from
                 //the Controller wich serves him the needed resource.
@@ -63,17 +68,29 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .logout()
                 .logoutUrl("/signout")
-                .logoutSuccessUrl("/login4.html")
+                .logoutSuccessUrl("/login")
                 .invalidateHttpSession(true)
                 .and()
                 .csrf().disable();
     }
 
 
-    //Basic password encoder using bcrypt for encryption.
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+    public BCryptPasswordEncoder passwordEncoder() {
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        return bCryptPasswordEncoder;
+    }
+
+    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth)  {
+        //BCryptPasswordEncoder encoder = passwordEncoder();
+        //auth.inMemoryAuthentication().withUser("logan@yahoo.com").password(encoder.encode("admin")).roles("user");
+        try {
+            auth.userDetailsService(userDetailsService).passwordEncoder(new BCryptPasswordEncoder());
+        } catch (Exception e) {
+
+            System.out.println("Login Failed");
+        }
     }
 
 }

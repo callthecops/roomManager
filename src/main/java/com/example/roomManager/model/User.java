@@ -1,6 +1,7 @@
 package com.example.roomManager.model;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -9,14 +10,30 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
+    @Column(name = "username", unique = true)
+    private String username;
     private String password;
-    private String role;
+    @Column(name="is_Enabled")
+    private Boolean isEnabled;
 
-    public User(String name, String password, String role) {
-        this.name = name;
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles;
+
+    public User(String username, String password, Set<Role> roles) {
+        this.username = username;
         this.password = password;
-        this.role = role;
+        this.roles = roles;
+    }
+
+    public User(Long id, String username, String password, Set<Role> roles) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.roles = roles;
+    }
+
+    public User() {
     }
 
     public Long getId() {
@@ -27,12 +44,20 @@ public class User {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getUsername() {
+        return username;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 
     public String getPassword() {
@@ -43,11 +68,12 @@ public class User {
         this.password = password;
     }
 
-    public String getRole() {
-        return role;
+    public Boolean getEnabled() {
+        return isEnabled;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setEnabled(Boolean enabled) {
+        isEnabled = enabled;
     }
+
 }
