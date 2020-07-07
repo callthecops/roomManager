@@ -1,3 +1,3 @@
-INSERT INTO users (username, password, role) VALUES ('user1','$2y$12$x6ttHRkoBggiFDS42..nleKvu/grzYnJNaoIjr6Fhja2Lch8lrwr6','USER');
-INSERT INTO users (username, password, role) VALUES ('user2','$2y$12$NPwnUv.XKreK1N9/boQU2uHRvarqXwzsMvatQGu2C1MXcquJHJalW','USER');
-INSERT INTO users (username, password, role) VALUES ('admin','$2y$12$vAtmAv/hYaVv2RiDmD8yYea0eUxW7MwsTYAygtzx1bXqfUvguF7xy','ADMIN');
+INSERT INTO users (username, password, is_enabled) VALUES ('user1','$2a$10$zHIm3ITSZkxSwcUJr2/F4.L5K8y8BIk/jtugwJA/3b/4ewO3Ud9qe',true);
+INSERT INTO users (username, password, is_enabled) VALUES ('user2','$2a$10$zHIm3ITSZkxSwcUJr2/F4.L5K8y8BIk/jtugwJA/3b/4ewO3Ud9qe',true);
+INSERT INTO users (username, password, is_enabled) VALUES ('admin','$2a$10$zHIm3ITSZkxSwcUJr2/F4.L5K8y8BIk/jtugwJA/3b/4ewO3Ud9qe',true);

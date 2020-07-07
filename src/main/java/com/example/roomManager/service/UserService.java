@@ -13,7 +13,21 @@ public class UserService {
 
 
     public User findByUserName(String userName) {
-        return userRepository.findByUserName(userName);
+        return userRepository.findByUsername(userName);
+    }
+
+
+    public User saveUser(User user_)
+    {
+        User user=new User();
+        user.setEnabled(user_.getEnabled());
+        user.setPassword(user_.getPassword());
+        user.setUsername(user_.getUsername());
+        user.setRoles(user_.getRoles());
+
+
+        return userRepository.save(user);
+
     }
 
 

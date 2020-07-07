@@ -16,8 +16,13 @@ import java.util.List;
 
 @Controller
 public class LoginController {
-    private final FloorRepository floorRepository;
-    private final UserRepository userRepository;
+
+    @Autowired
+    private  FloorRepository floorRepository;
+
+
+	/*
+	private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
@@ -27,6 +32,7 @@ public class LoginController {
         this.userRepository = userRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
+    */
 
 
     @GetMapping("/login")
@@ -48,6 +54,7 @@ public class LoginController {
 
         return "home9";
     }
+
 
 
 }

@@ -1,79 +1,82 @@
 package com.example.roomManager.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.session.RegisterSessionAuthenticationStrategy;
+import org.springframework.security.web.session.HttpSessionEventPublisher;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-@Configuration
+
+
+//security configuration class for implementing spring security on urls
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private UserDetailsService userDetailsService;
-
-    //this is added so we can give it a parameter and make request on static resources available
-    private static final String[] PUBLIC_MATCHERS = {
-            "/webjars/**",
-            "/css/**",
-            "/js/**",
-            "/images/**",
-            "/"
-    };
-
-
-    //This method is responsible with the authentication of things.
-    //In this method we select the inMemoryAuth in order to add users to use in the log in form in memory .
-    //Then we use the password eccoder to encrypt the password
-//    @Override
-//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//        auth
-//                .inMemoryAuthentication()
-//                .withUser("user").password(passwordEncoder().encode("password")).roles("USER").and()
-//                .withUser("admin").password(passwordEncoder().encode("password")).roles("USER", "ADMIN");
-//    }
-
-    //This method is responsible for configuring all the requests and mappings.What this does is the following.
-    //we create a custom login page by adding .and().formLogin().loginPage("/login") and we use permitAll()
-    //to permit all users to access it.This custom login page has to be created and served by a controller for
-    //it to work.What happens behind the scenes is this.Once we add the .loginPage("/login") method , sprin security
-    //will automatically send a get request on that path in order to retrieve the resource.
-    // So we need to add a new file to the templates folder and create a Controller with a /login
-    //@GetMapping wich returns the file name that we created.Next we add the paths for logout.
+    private CustomUserDetailsService userDetailsService;
+    //for handling user success handler
+    @Autowired
+    private CustomizeAuthenticationSuccessHandler customizeAuthenticationSuccessHandler;
     @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http
-                .authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/resources/**", "/js/**", "/css/**", "/images/**", "/fonts/**", "/scss/**", "/index", "/", "/login").permitAll()
-                //this is enableing request on static resources wich are blocked by spring security automatically.
-                .antMatchers(PUBLIC_MATCHERS).permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .formLogin()
-                .loginPage("/login").failureUrl("/login?error=true")
-                .usernameParameter("username")
-                .passwordParameter("password")
+    //this configuration is for handling user requests
+    protected void configure(HttpSecurity http)  {
+        try {
+            http
+                    .authorizeRequests()
+                    .antMatchers("/login").permitAll()
+                    .anyRequest()
+                    .authenticated().and().csrf().disable().formLogin().successHandler(customizeAuthenticationSuccessHandler)
+                    .loginPage("/login").failureUrl("/login?error=true")
+                    .usernameParameter("username")
+                    .passwordParameter("password")
+                    .and().logout()
+                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                    .logoutSuccessUrl("/logout.done").deleteCookies("JSESSIONID")
+                    .invalidateHttpSession(true)
+                    .logoutSuccessUrl("/login").and().exceptionHandling().accessDeniedPage("/403");
+            http.sessionManagement( ).maximumSessions(1). maxSessionsPreventsLogin(false);
+	       /* http.sessionManagement( ).sessionFixation( ).migrateSession( )
+	                .sessionAuthenticationStrategy( registerSessionAuthStr( ) );*/
 
-                .permitAll()
-                //This method here automatically redirects the user after login to the /home endpoint from
-                //the Controller wich serves him the needed resource.
-                .defaultSuccessUrl("/home", true)
-                .and()
-                .logout()
-                .logoutUrl("/signout")
-                .logoutSuccessUrl("/login")
-                .invalidateHttpSession(true)
-                .and()
-                .csrf().disable();
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            System.out.println("Exception here");
+        }
     }
 
+
+    //this method allows static resources to be neglected by spring security
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web
+                .ignoring()
+                .antMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**","/assets/**","/fonts/**","/dis/**","/vendor1/**","/assets2/**");
+    }
+
+
+
+    @Bean
+    public SessionRegistry sessionRegistry() {
+        return new SessionRegistryImpl();
+    }
+    @Bean
+    public RegisterSessionAuthenticationStrategy registerSessionAuthStr( ) {
+        return new RegisterSessionAuthenticationStrategy( sessionRegistry( ) );
+    }
+    @Bean
+    public ServletListenerRegistrationBean<HttpSessionEventPublisher> httpSessionEventPublisher() {
+        return new ServletListenerRegistrationBean<HttpSessionEventPublisher>(new HttpSessionEventPublisher());
+    }
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -86,11 +89,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         //BCryptPasswordEncoder encoder = passwordEncoder();
         //auth.inMemoryAuthentication().withUser("logan@yahoo.com").password(encoder.encode("admin")).roles("user");
         try {
+            //The authentication manager loads the userdetails from DB and checks agains the data provided by the
+            //user during login.
             auth.userDetailsService(userDetailsService).passwordEncoder(new BCryptPasswordEncoder());
         } catch (Exception e) {
 
             System.out.println("Login Failed");
         }
     }
+
 
 }
