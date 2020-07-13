@@ -10,4 +10,6 @@ public class Criteria {
     public void setCriteriaId(String criteriaId) {
         this.criteriaId = criteriaId;
     }
+
+    public void doStuf(){}
 }
