@@ -14,4 +14,6 @@ public class Criteria {
     public void doStuf(){
         System.out.println("DO STUFF");
     }
+
+    public void doStuff(){}
 }
