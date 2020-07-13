@@ -11,9 +11,5 @@ public class Criteria {
         this.criteriaId = criteriaId;
     }
 
-    public void doStuf(){
-        System.out.println("DO STUFF");
-    }
 
-    public void doStuff(){}
 }
