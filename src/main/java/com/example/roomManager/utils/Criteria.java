@@ -11,5 +11,4 @@ public class Criteria {
         this.criteriaId = criteriaId;
     }
 
-
 }
