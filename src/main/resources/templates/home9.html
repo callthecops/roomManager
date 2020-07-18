@@ -172,13 +172,35 @@ ol{
         height:20px;
         }
 
+#bedsnum {
+display: grid;
+    text-align:center;
+  grid-template-columns: 1fr 1fr 1fr ;
+  grid-template-rows: 0.5fr 0.5fr 0.5fr;
+  gap: 1px 1px;
+    color:black;
+  grid-template-areas: ". bedsnumheader bedsnumheader ."
+                "bedsnumall bedsnumall bedsnumvalue1 bedsnumvalue1"
+                "bedsnumfree bedsnumfree bedsnumvalue2 bedsnumvalue2";
+
+}
+.bedsnumheader { grid-area: bedsnumheader;background-color:rgba(0,123,255);border-radius:10px;font-size:20px;font-weight: bold; }
+
+.bedsnumall { grid-area: bedsnumall;text-align:right;font-size:20px; font-weight: bold;}
+
+.bedsnumvalue1 { grid-area: bedsnumvalue1; font-size:20px;background-color:rgba(0,123,255);border-radius:10px;text-align:left;font-weight: bold;}
+
+.bedsnumvalue2 { grid-area: bedsnumvalue2; font-size:20px;background-color:rgba(34,177,76);border-radius:10px;text-align:left;font-weight: bold;}
+
+.bedsnumfree { grid-area: bedsnumfree;text-align:right;font-size:20px;font-weight: bold; }
+
+
 
 
 
     </style>
 </head>
-<body data-spy="scroll" data-target=".site-navbar-target" data-offset="300">
-
+<body data-spy="scroll" data-target=".site-navbar-target" data-offset="300" onload="getStuff()">
 
 <div id="overlayer"></div>
 <div class="loader">
@@ -204,6 +226,13 @@ ol{
 </div>
 <div id="adminHeader" th:if="${logedInUser=='admin'}">
     <h2>Admin Account</h2>
+</div>
+<div id="bedsnum">
+    <div class="bedsnumheader ">Beds</div>
+    <div class="bedsnumall ">Total:</div>
+    <div class="bedsnumfree ">Free:</div>
+    <div id="totalbeds" class="bedsnumvalue1 "></div>
+    <div id="freebeds" class="bedsnumvalue2 "></div>
 </div>
 <section>
     <br>
@@ -272,6 +301,30 @@ ol{
 </section>
 
 <script>
+
+function getStuff(){
+getAllBeds();
+getFreeBeds();
+}
+
+
+async function getAllBeds() {
+  const res = await fetch("/retrievebeds");
+  const beds = await res.json();
+  document.getElementById('totalbeds').innerHTML = beds;
+}
+
+async function getFreeBeds() {
+  const res = await fetch("/retrievefreebeds");
+  const freeBeds = await res.json();
+  document.getElementById('freebeds').innerHTML = freeBeds;
+}
+
+
+
+window.setInterval(getAllBeds, 10000);
+window.setInterval(getFreeBeds, 3000);
+
 
 const addRoomBtns = document.querySelectorAll(".addRoom");
 for (let i = 0; i < addRoomBtns.length; i++) {
@@ -443,9 +496,11 @@ function addBedInRoom(e){
                 room.querySelector(".roomNo").classList.add("full");
             }
         },
+
         error: function (e) {
             console.log("ERROR : ", e);
         }
+
     });
     } else {
       alert("All beds in this room are filled!");
@@ -486,6 +541,7 @@ function removeBedFromRoom(e){
     } else {
       alert("No bed in the room!");
     }
+
 }
 
 function occupiedBedInRoom(e){
@@ -520,12 +576,6 @@ function occupiedBedInRoom(e){
         }
       });
 }
-
-
-
-
-
-
 
 
 
